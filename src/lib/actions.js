@@ -14,20 +14,19 @@ export async function loginUser({ username, password }) {
       throw new Error(res.data.response?.message || "Invalid credentials");
     }
 
-    const token = res.data.token;
+    // return {
+    //   status: "success",
+    //   data: {
+    //     user: {
+    //       id: res.data.data.user.id,
+    //       username: res.data.data.user.username,
+    //       role: res.data.data.user.role,
+    //     },
+    //     token: res.data.token,
+    //   },
+    // };
 
-    // 3. Return user data (without sensitive info)
-    return {
-      status: "success",
-      data: {
-        user: {
-          id: "user-id",
-          username,
-          role: "user",
-        },
-        token,
-      },
-    };
+    return res.data;
   } catch (error) {
     if (process.env.NODE_ENV !== "development") {
       console.error("Login Action Error:", {
