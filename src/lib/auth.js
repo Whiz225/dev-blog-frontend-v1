@@ -1,14 +1,3 @@
-// import jwt from "jsonwebtoken";
-
-// export function verifyToken(token) {
-//   return new Promise((resolve, reject) => {
-//     if (err) {
-//       return reject(err);
-//     }
-//     resolve(decoded);
-//   });
-// }
-
 import api from "./axios";
 
 export async function verifyToken(token) {
@@ -29,7 +18,7 @@ export async function verifyToken(token) {
   }
 }
 
-// Helper function to create tokens
-export function createToken(payload, expiresIn = "1h") {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn });
-}
+// // Helper function to create tokens
+// export function createToken(payload, expiresIn = "1h") {
+//   return jwt.sign(payload, JWT_SECRET, { expiresIn });
+// }

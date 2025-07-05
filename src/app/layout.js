@@ -1,21 +1,25 @@
 import { Inter } from "next/font/google";
+import { headers } from "next/headers";
+
 import "@/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Providers } from "@/providers/provider";
-import { headers } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Dev Blog",
+  title: {
+    template: "%s / Dev Blog",
+    default: "Welcome / Dev Blog",
+  },
+  // title: "Dev Blog",
   description: "A developer community platform",
 };
 
 export default async function RootLayout({ children }) {
   const headersList = await headers();
-
-  // Try to get user info from headers first, then fallback to cookies
+  // Get user info from headers
   const user = headersList.get("x-user-username");
 
   return (

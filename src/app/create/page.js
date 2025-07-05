@@ -1,6 +1,11 @@
+import { redirect } from "next/navigation";
+
 import PostForm from "@/components/PostForm";
 import { createNewPost } from "@/lib/actions";
-import { redirect } from "next/navigation";
+
+export const metadata = {
+  title: "Create New Post",
+};
 
 export default async function CreatePost() {
   async function handleSubmit(formData) {

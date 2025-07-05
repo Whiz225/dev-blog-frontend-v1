@@ -4,16 +4,12 @@ const api = axios.create({
   // ✅ Make sure it's localhost not 127.0.0.1
   baseURL: process.env.NEXTAUTH_URL || "http://127.0.0.1:5000/api",
   timeout: 12000, // 12 seconds timeout
-  // baseURL: "https://booking-app-api-tp56.onrender.com/api/v1",
   // ✅ Needed for sending cookies
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
-
-// export default axiosInstance;
-// https://booking-app-api-tp56.onrender.com
 
 // Enhanced error handling
 

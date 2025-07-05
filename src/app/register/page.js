@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
+
 import Button from "@/components/Button";
 import SpinnerMini from "@/components/SpinnerMini";
 import { useCreateNewUser } from "@/hooks/userCreateNewUser";
-import Link from "next/link";
-import { useState } from "react";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("chisom@gmail.com");

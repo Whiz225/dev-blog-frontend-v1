@@ -1,10 +1,6 @@
-// "use client";
-
-// import { useMyPosts } from "@/hooks/useMyPosts";
 import Link from "next/link";
-import Spinner from "@/components/Spinner";
+
 import PostCard from "@/components/PostCard";
-import { getMyPosts } from "@/lib/actions";
 import Button from "./Button";
 
 async function UserPostsList({ posts }) {

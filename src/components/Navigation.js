@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Button from "./Button";
 import Input from "./Input";
-import { useEffect, useState } from "react";
 
 export default function Navigation() {
   const router = useRouter();
@@ -12,8 +10,6 @@ export default function Navigation() {
   const searchParams = useSearchParams();
   const currentURL = pathname;
   // const currentURL = `${pathname}?${searchParams.toString()}`;
-
-  console.log("URL", currentURL);
 
   function handleClick(sort) {
     const params = new URLSearchParams(searchParams.toString());
@@ -29,13 +25,6 @@ export default function Navigation() {
       <Button
         variation="secondary"
         size="small"
-        onClick={() => handleClick("all")}
-      >
-        All Posts
-      </Button>
-      <Button
-        variation="secondary"
-        size="small"
         onClick={() => handleClick("recent")}
       >
         Recent Posts
@@ -44,18 +33,6 @@ export default function Navigation() {
         placeholder="search by category..."
         onChange={(e) => handleClick(e.target.value)}
       />
-
-      {/* <Button
-        variation="secondary"
-        size="small"
-        onClick={() => handleClick("category")}
-      >
-        Category
-      </Button> */}
-
-      {/* <Button href="/about" className="text-gray-600 hover:text-indigo-600">
-        About
-      </Button> */}
     </nav>
   );
 }

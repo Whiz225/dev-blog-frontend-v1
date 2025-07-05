@@ -1,29 +1,27 @@
-// "use client";
-
 import { headers } from "next/headers";
 import Link from "next/link";
+import { Suspense } from "react";
+
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import UserPostsList from "@/components/UsersPostsList";
-import { Suspense } from "react";
-import Spinner from "@/components/Spinner";
-import { getCurrentUser, getMyPosts } from "@/lib/actions";
+import { getMyPosts } from "@/lib/actions";
+
+export const metadata = {
+  title: "MyPosts",
+};
 
 export default async function PostsPage({ searchParams }) {
-  // Get headers and cookies
+  // Get headers
   const headersList = await headers();
-
-  // Try to get user info from headers first, then fallback to cookies
+  // Get user info from headers
   const username = headersList.get("x-user-username");
   // const userId = headersList.get("x-user-id");
-
   const data = await getMyPosts();
   const { posts } = data.data;
 
   let filteredPosts;
-  const sort = await searchParams?.sortBy;
-
-  console.log("sort", sort);
+  const sort = (await searchParams?.sortBy) || "all";
 
   if (!sort || sort === "all") filteredPosts = posts;
 

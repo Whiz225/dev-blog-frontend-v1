@@ -8,7 +8,7 @@ export function useCreateNewUser() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { mutate: createUser, isPending:isLoading } = useMutation({
+  const { mutate: createUser, isPending: isLoading } = useMutation({
     mutationFn: async ({ username, password, email }) => {
       try {
         const response = await fetch("/api/auth/register", {
@@ -51,22 +51,14 @@ export function useCreateNewUser() {
 
       queryClient.setQueryData(["user"], data.username);
 
-      // // Store token in cookies (if using cookie-based auth)
-      // cookies().set("token", data.token, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
-      //   maxAge: 60 * 60 * 24 * 7, // 1 week
-      //   path: "/",
-      // });
-
       // Show success message
       toast.success(`Welcome ${data.username} !`);
 
-      // Redirect to dashboard
-      router.push("/");
+      // Redirect to myPosts
+      router.push("/posts");
     },
     onError: (error) => {
-      console.error("Create user error:", error);
+      // console.error("Create user error:", error);
 
       // Show appropriate error message
       const errorMessage =

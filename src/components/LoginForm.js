@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+
 import Form from "@/components/Form";
 import Input from "@/components/Input";
 import FormRowVertical from "@/components/FormRowVertical";
-// import { useLogin } from "./useLogin";
 import SpinnerMini from "@/components/SpinnerMini";
 import Button from "@/components/Button";
 import { useLogin } from "@/hooks/useLogin";
@@ -34,7 +34,6 @@ function LoginForm() {
         <Input
           type="text"
           id="username"
-          // This makes this form better for password managers
           autoComplete="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}

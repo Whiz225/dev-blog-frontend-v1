@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { verifyToken } from "@/lib/auth"; // You'll need to implement this
+import { verifyToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
 const protectedRoutes = [
@@ -50,20 +50,6 @@ export async function middleware(request) {
         headers: requestHeaders,
       },
     });
-
-    // response.cookies.set("username", res.user.username, {
-    //   httpOnly: false,
-    //   path: "/",
-    //   sameSite: "lax",
-    //   secure: process.env.NODE_ENV === "production",
-    // });
-
-    // response.cookies.set("userId", res.user.id, {
-    //   httpOnly: false,
-    //   path: "/",
-    //   secure: process.env.NODE_ENV === "production",
-    //   sameSite: "lax",
-    // });
 
     return response;
   } catch (error) {

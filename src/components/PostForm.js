@@ -1,5 +1,3 @@
-import Link from "next/link";
-import Button from "./Button";
 import Input from "./Input";
 import FormButton from "./FormButton";
 
@@ -7,10 +5,12 @@ function PostForm({ handler, post, btnText, text, children }) {
   let id = "";
   let title = "";
   let content = "";
+  let category = "";
   if (post) {
     id = post.id;
     title = post.title;
     content = post.content;
+    category = post.category;
   }
   return (
     <>
@@ -39,6 +39,25 @@ function PostForm({ handler, post, btnText, text, children }) {
 
         <div>
           <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Category
+          </label>
+          <Input
+            id="category"
+            type="text"
+            name="category"
+            min={1}
+            max={30}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            defaultValue={category}
+            required
+          />
+        </div>
+
+        <div>
+          <label
             htmlFor="content"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
@@ -55,7 +74,6 @@ function PostForm({ handler, post, btnText, text, children }) {
         </div>
 
         <div className="flex justify-end space-x-3">
-          {/* <Link href="/posts">Cancel</Link> */}
           {children}
           <FormButton>{btnText} </FormButton>
         </div>

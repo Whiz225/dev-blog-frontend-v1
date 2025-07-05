@@ -1,22 +1,25 @@
-// "use client";
-
 import Link from "next/link";
+
 import Navigation from "./Navigation";
 import Button from "./Button";
 import Logo from "./Logo";
-// import { headers } from "next/headers";
 
 export default async function Header({ user }) {
+
   return (
     <header className="bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="flex gap-2 justify-center items-center">
-          <Link href="/" className="text-2xl font-bold text-indigo-600">
-            <Logo />
-            <span>DevBlog</span>
-          </Link>
-        </div>
-        <Navigation />
+      <div className="container mx-auto px-4 py-3.2 flex justify-between items-center">
+        <Link href="/" className="text-2xl font-bold text-indigo-600">
+          <div className="flex gap-2 justify-center items-center relative">
+            <div className="relative">
+              <Logo />
+              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-bold">
+                DevBlog
+              </span>
+            </div>
+          </div>
+        </Link>
+        {/* <Navigation /> */}
 
         <div className="flex items-center space-x-4">
           {!user ? (
@@ -40,7 +43,7 @@ export default async function Header({ user }) {
                 href="/posts"
                 className="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
               >
-                Manage Post
+                Manage MyPosts
               </Link>
               <Button
                 logout={true}

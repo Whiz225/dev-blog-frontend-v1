@@ -1,36 +1,26 @@
 // export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { headers } from "next/headers";
+
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import Link from "next/link";
 import { getPost } from "@/lib/actions";
 
-// export async function generateMetaData({ params }) {
-//   const { name } = await getCabin(params.cabinId);
-//   return { title: `cabin ${name}` };
-// }
+export async function generateMetadata({ params }) {
+  const data = await getPost(params.id);
+  const { category } = data.data.data;
 
-// export async function generateStaticParams() {
-//   const cabins = await getCabins();
-
-//   const ids = cabins.map((cabin) => ({
-//     cabinId: `${cabin.id}`,
-//   }));
-//   return ids;
-// }
+  return { title: `${category} post` };
+}
 
 export default async function PostPage({ params }) {
-  // 1. Properly access dynamic params
   const { id } = params;
-
-  // Get headers and cookies
+  // Get headers 
   const headersList = await headers();
-
-  // Try to get user info from headers first, then fallback to cookies
+  // Get user info from headers
   const username = headersList.get("x-user-username");
   const userId = headersList.get("x-user-id");
-  console.log("User info:", { username, userId });
   // 3. Fetch post data
   const postResponse = await getPost(id);
   const post = postResponse.data.data;
@@ -86,9 +76,7 @@ export default async function PostPage({ params }) {
 
         <div className="mt-6">
           <Link href="/posts">
-            {/* <a className="text-blue-600 hover:text-blue-800 font-medium"> */}
             ← Back to all posts
-            {/* </a> */}
           </Link>
         </div>
       </div>

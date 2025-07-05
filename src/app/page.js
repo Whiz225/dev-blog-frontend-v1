@@ -1,12 +1,8 @@
-// pages/index.js
-import PostsList from "../components/PostsList";
 import Link from "next/link";
+
+import PostsList from "../components/PostsList";
 import Button from "@/components/Button";
 import { getAllPosts } from "@/lib/actions";
-
-export const metadata = {
-  title: "Dev blog",
-};
 
 export default async function Home({ searchParams }) {
   const res = await getAllPosts();
@@ -15,9 +11,8 @@ export default async function Home({ searchParams }) {
   let filteredPosts;
   const sort = await searchParams?.sortBy;
 
-  console.log("sort", sort);
-
-  if (!sort || sort === "all") filteredPosts = posts;
+  if (!sort) filteredPosts = posts;
+  // if (!sort || sort === "all") filteredPosts = posts;
 
   if (sort === "recent")
     filteredPosts = posts.sort(
@@ -48,27 +43,3 @@ export default async function Home({ searchParams }) {
     </div>
   );
 }
-
-// export async function getStaticProps(){
-//   const res = await getAllPosts()
-//   const {posts} = res.data.data
-
-//   return {
-//     props: {
-//       posts,
-//     },
-//     revalidate: 10,
-//   }
-// }
-
-// export async function getServerSideProps(context) {
-//   const res = await getAllPosts();
-//   const posts = res.data.data;
-//   console.log("post", posts);
-
-//   return {
-//     props: {
-//       posts,
-//     },
-//   };
-// }

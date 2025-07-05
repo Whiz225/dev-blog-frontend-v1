@@ -1,21 +1,26 @@
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+
 import { updatePost } from "@/lib/actions";
 import { getPost } from "@/lib/actions";
-import { redirect } from "next/navigation";
 import Layout from "@/components/Layout";
-import Link from "next/link";
 import PostForm from "@/components/PostForm";
-import { headers } from "next/headers";
+
+export async function generateMetadata({ params }) {
+  const data = await getPost(params.id);
+  const { category } = data.data.data;
+
+  return { title: `Edit ${category} post` };
+}
 
 export default async function EditPostPage({ params }) {
-  // Get headers and cookies
+  // Get headers
   const headersList = await headers();
-
-  // Try to get user info from headers first, then fallback to cookies
+  // Get user info from headers
   const user = headersList.get("x-user-username");
   // const userId = headersList.get("x-user-id");
-
   const data = await getPost(params.id);
-  // const { title, id, content } = data.data.data;
   const post = data.data.data;
 
   async function handleSubmit(formData) {

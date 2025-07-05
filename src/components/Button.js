@@ -1,10 +1,9 @@
 "use client";
 
-import { deletePost, userLogout } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-// import {useFormState} from "react-dom"
+import { deletePost, userLogout } from "@/lib/actions";
 
 const sizeClasses = {
   large: "text-[1.2rem] p-[0.4rem_0.8rem] uppercase font-semibold text-center",
@@ -41,7 +40,6 @@ export default function Button({
         router.push("/login");
         router.refresh();
       } // Refresh the page to update auth state
-      // }
     } catch (err) {
       console.error("Logout failed:", err);
       toast.error("Logout failed:", err);

@@ -1,6 +1,6 @@
 "use client";
-// import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+
 import SpinnerMini from "./SpinnerMini";
 
 const sizeClasses = {
@@ -22,7 +22,6 @@ export default function FormButton({
   variation = "primary",
 }) {
   const { pending } = useFormStatus();
-  // const [pending ]= useActionState();
 
   const baseClasses =
     "border-none rounded-sm shadow-sm disabled:opacity-75 disabled:cursor-not-allowed transition-colors";

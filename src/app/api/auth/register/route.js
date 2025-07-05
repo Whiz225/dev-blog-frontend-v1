@@ -29,20 +29,7 @@ export async function POST(request) {
 
     const response = Response.json(data, { status: 201 });
 
-    // console.log("BBB1", response);
-    // console.log("BBB2", data);
-    // response.cookies.set({
-    //   name: "token",
-    //   value: data.token,
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === "production",
-    //   maxAge: 60 * 60 * 24 * 7, // 1 week
-    //   path: "/",
-    //   sameSite: "strict",
-    // });
-
     return response;
-
   } catch (error) {
     // console.error("Api Registration Error:", {
     //   message: error.message,

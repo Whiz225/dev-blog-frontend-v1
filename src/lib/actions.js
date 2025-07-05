@@ -1,19 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import api from "./axios";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-// import { auth, signIn, signOut } from "./auth";
-// import { getBookings } from "./data-service";
+import { cookies } from "next/headers";
+
+import api from "./axios";
 
 export async function loginUser({ username, password }) {
   try {
-    console.log("action login", username, password);
-
     const res = await api.post(`/auth/login`, { username, password });
 
-    console.log("action", res.data);
     if (res.data.status !== "success")
       throw new Error(res.data.response?.message || "Login failed");
 
@@ -41,8 +37,6 @@ export async function loginUser({ username, password }) {
 
 export async function registerUser({ email, username, password }) {
   try {
-    console.log("action register", email, username, password);
-
     // Make API request
     const res = await api.post("/auth/register", {
       email,
@@ -58,18 +52,6 @@ export async function registerUser({ email, username, password }) {
           "Registration failed"
       );
     }
-
-    // Set secure HTTP-only cookie
-    // cookies().set("token", res.data.data.token, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === "production",
-    //   maxAge: 60 * 60 * 24 * 7, // 1 week
-    //   path: "/",
-    //   sameSite: "strict",
-    // });
-
-    // // Redirect on success
-    // redirect("/");
 
     // Return data (though redirect will prevent this from being reached)
     return res.data;
@@ -152,6 +134,7 @@ export async function createNewPost(formData) {
   try {
     const content = formData.get("content");
     const title = formData.get("title");
+    const category = formData.get("category");
 
     if (!content || !title) throw new Error("content and title are required");
 
@@ -163,7 +146,7 @@ export async function createNewPost(formData) {
 
     const res = await api.post(
       `/posts/author`,
-      { content, title },
+      { content, title, category },
       {
         credentials: "include",
         headers: {
@@ -191,6 +174,7 @@ export async function updatePost(formData) {
     const id = formData.get("postId");
     const content = formData.get("content");
     const title = formData.get("title");
+    const category = formData.get("category");
 
     if (!content || !title || !id)
       throw new Error("content and title are required");
@@ -203,7 +187,7 @@ export async function updatePost(formData) {
 
     const res = await api.patch(
       `/posts/author/${id}`,
-      { content, title },
+      { content, title, category },
       {
         credentials: "include",
         headers: {
@@ -217,12 +201,8 @@ export async function updatePost(formData) {
       throw new Error(res.data.response?.message || "Unable to update Posts");
     }
 
-    // const data = await
-
     revalidatePath(`/posts/edit/${id}`);
     revalidatePath("/posts");
-
-    // redirect(`/posts/${id}`);
 
     return res.data;
   } catch (error) {
@@ -233,78 +213,6 @@ export async function updatePost(formData) {
     throw new Error(message);
   }
 }
-
-// export async function createNewPost({ content, title }) {
-//   try {
-//     const cookieStore = await cookies();
-//     const jwt = cookieStore.get("token");
-
-//     const res = await api.post(
-//       `/posts/author`,
-//       { content, title },
-//       {
-//         credentials: "include",
-//         headers: {
-//           Cookie: `jwt=${jwt?.value}`,
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-
-//     if (res.data.status !== "success")
-//       throw new Error(res.data.response?.message || "Unable to load Posts");
-
-//     return res.data;
-//   } catch (error) {
-//     const message =
-//       error.response?.data?.message || error.message || "Unable to load Posts";
-//     throw new Error(message);
-//   }
-// }
-
-// export async function updatePost(formData) {
-//   try {
-//     const id = formData.get("postId");
-//     const content = formData.get("content");
-//     const title = formData.get("title");
-
-//     console.log({ id, content, title });
-
-//     const cookieStore = await cookies();
-//     const jwt = cookieStore.get("token");
-
-//     const res = await api.patch(
-//       `/posts/author/${id}`,
-//       { content, title },
-//       {
-//         credentials: "include",
-//         headers: {
-//           Cookie: `jwt=${jwt?.value}`,
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-
-//     if (res.data.status !== "success") {
-//       throw new Error(res.data.response?.message || "Unable to update Posts");
-//     }
-
-//     // const data = await
-
-//     revalidatePath(`/posts/edit/${id}`);
-//     revalidatePath("/posts");
-
-//     // redirect(`/posts/${id}`);
-
-//     return res.data;
-//   } catch (error) {
-//     const message =
-//       error.response?.data?.message ||
-//       error.message ||
-//       "Unable to update Posts";
-//     throw new Error(message);
-//   }
-// }
 
 export async function getCurrentUser() {
   try {
@@ -346,8 +254,6 @@ export async function deletePost(id) {
     const cookieStore = await cookies();
     const jwt = cookieStore.get("token");
 
-    console.log("action delete", id);
-
     const res = await api.delete(`/posts/author/${id}`, {
       credentials: "include",
       headers: {
@@ -371,9 +277,6 @@ export async function deletePost(id) {
 
 export async function userLogout() {
   try {
-    // const cookieStore = await cookies();
-    // const jwt = cookieStore.get("token");
-
     const res = await api.get("/auth/logout", {
       credentials: "include",
       headers: {
@@ -408,113 +311,3 @@ export async function userLogout() {
     throw new Error(message);
   }
 }
-
-// export async function getCurrentUser() {
-//   try {
-//     const res = await api.get(`/user/me`);
-
-//     if (res.data.status !== "success")
-//       throw new Error(res.data.response?.message || "Unable to load Posts");
-
-//     return res.data;
-//   } catch (error) {
-//     const message =
-//       error.response?.data?.message || error.message || "Unable to load Posts";
-//     throw new Error(message);
-//   }
-// }
-
-// catch (error) {
-//   if (error.response) {
-//     // The request was made and the server responded with a status code
-//     console.error("Server responded with error:", error.response.status);
-//     return {
-//       error: error.response.data.message || "Server error occurred",
-//       status: "error"
-//     };
-//   } else if (error.request) {
-//     // The request was made but no response was received
-//     console.error("No response received:", error.request);
-//     return {
-//       error: "No response from server. Please try again.",
-//       status: "error"
-//     };
-//   } else {
-//     // Something happened in setting up the request
-//     console.error("Request setup error:", error.message);
-//     return {
-//       error: "Request setup failed",
-//       status: "error"
-//     };
-//   }
-// }
-
-/*
-export async function updateGuest(formData) {
-  const session = await auth();
-  if (!session) throw new Error("Please login to continue");
-
-  const nationalID = formData.get("nationalID");
-  const [nationality, countryFlag] = formData.get("nationality").split("%");
-
-  if (!/^[a-zA-Z0-9]{6,12}$/.test(nationalID))
-    throw new Error("Please provide a valid national ID");
-  const updateData = { nationalID, countryFlag, nationality };
-
-  const res = await axios.patch(`guests/${session.user.guestId}`, updateData);
-  if (res.data.status !== "success")
-    throw new Error("Guest could not be updated");
-
-  revalidatePath("/account/profile");
-}
-
-export async function deleteReservation(bookingId) {
-  const session = await auth();
-  if (!session) throw new Error("Please login to continue");
-
-  const guestBookings = await getBookings(session.user.guestId);
-  const guestBookingIds = guestBookings.map((booking) => booking._id);
-  if (!guestBookingIds.includes(bookingId))
-    throw Error("You are not allow to delete this booking");
-
-  const res = await axios.delete(`/bookings/web/${bookingId}`);
-  if (res.status !== 204) throw new Error("Booking could not be deleted");
-
-  revalidatePath("/account/reservations");
-}
-
-export async function updateBooking(formData) {
-  const session = await auth();
-  if (!session) throw new Error("Please login to continue");
-
-  const guestBookings = await getBookings(session.user.guestId);
-  const guestBookingIds = guestBookings.map((booking) => booking._id);
-
-  const bookingId = formData.get("bookingId");
-  if (!guestBookingIds.includes(bookingId))
-    throw new Error("You are not allow to update this booking");
-
-  const updateData = {
-    numGuests: Number(formData.get("numGuests")),
-    observations: formData.get("observations").slice(0, 1000),
-  };
-  const res = await axios.patch(`/bookings/web/${bookingId}`, updateData);
-  if (res.data.status !== "success")
-    throw new Error("Booking could not be updated");
-
-  revalidatePath(`/account/reservations/edit/${bookingId}`);
-  revalidatePath("/account/reservations");
-
-  redirect("/account/reservations");
-}
-
-
-
-export async function signInAction() {
-  await signIn("google", { redirectTo: "/account" });
-}
-
-export async function signOutAction() {
-  await signOut("google", { redirectTo: "/" });
-}
-*/

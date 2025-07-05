@@ -8,7 +8,6 @@ const PostCard = ({ post, children }) => {
       <div className="relative h-48 w-full">
         <Image
           src={post.image || "/img/default-post-image.jpg"}
-          // src={`/img/tours${post.image || "/default-post-image.jpg"}`}
           alt={post.title}
           fill
           className="object-cover"
@@ -33,25 +32,17 @@ const PostCard = ({ post, children }) => {
           {post.title}
         </h3>
 
-        {/* Excerpt */}
+        {/* Content */}
         <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
           {post.content.length > 35
             ? `${post.content.slice(0, 35)}...`
-            : post.content || "No excerpt available..."}
+            : post.content || "No Content available..."}
         </p>
 
         {/* Author and Date */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="relative h-10 w-10 rounded-full overflow-hidden">
-              {/* <Image
-                src={`/img${post.author?.avatar || "users/default-avatar.jpg"}`} // No extra slashes
-                alt="User profile"
-                width={640} // Must specify
-                height={360} // Must specify
-                priority={true} // If above the fold
-                quality={75} // Default is 75
-              /> */}
 
               <Image
                 src={`/img${

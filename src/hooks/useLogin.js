@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
 export function useLogin() {
-  // In your login page
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("from") || "/posts";
   const queryClient = useQueryClient();
@@ -21,7 +21,7 @@ export function useLogin() {
             username,
             password,
           }),
-        }); // Note: singular "posts"
+        }); 
 
         if (!response.ok) {
           let errorData;
@@ -51,14 +51,6 @@ export function useLogin() {
 
       queryClient.setQueryData(["user"], data.username);
 
-      // // Store token in cookies (if using cookie-based auth)
-      // cookies().set("token", data.token, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
-      //   maxAge: 60 * 60 * 24 * 7, // 1 week
-      //   path: "/",
-      // });
-
       // Show success message
       toast.success("Logged in successfully!");
 
@@ -66,7 +58,7 @@ export function useLogin() {
       router.push(redirectTo);
     },
     onError: (error) => {
-      console.error("Login error:", error);
+      // console.error("Login error:", error);
 
       // Show appropriate error message
       const errorMessage =
@@ -76,7 +68,7 @@ export function useLogin() {
 
       toast.error(errorMessage);
     },
-    // Optional: Reset mutation state after 3 seconds
+    // Reset mutation state after 3 seconds
     retry: false,
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
