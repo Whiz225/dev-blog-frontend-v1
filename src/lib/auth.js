@@ -1,4 +1,4 @@
-import api from "../services/axios";
+import api from "@lib/api";
 
 export async function verifyToken(token) {
   try {
