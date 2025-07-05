@@ -1,4 +1,5 @@
 import { registerUser } from "@/lib/actions";
+import { cookies } from "next/headers";
 
 export async function POST(request) {
   try {
@@ -28,6 +29,18 @@ export async function POST(request) {
     const data = await registerUser({ username, email, password });
 
     const response = Response.json(data, { status: 201 });
+
+    const cookieStore = await cookies();
+
+    cookieStore.set({
+      name: "token",
+      value: data.data.token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: "/",
+      sameSite: "strict",
+    });
 
     return response;
   } catch (error) {
