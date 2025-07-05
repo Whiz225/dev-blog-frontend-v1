@@ -34,15 +34,21 @@ export async function POST(request) {
 
     return response;
   } catch (error) {
-    // console.error("Login API Error:", {
-    //   message: error.message,
-    //   statusCode: error.statusCode || 500,
-    // });
+    // Development logging
+    if (process.env.NODE_ENV !== "development") {
+      console.error("Login Error:", {
+        message: error.message,
+        stack: error.stack,
+      });
+    }
 
+    // Production-safe response
     return Response.json(
       {
-        error: error.message || "Authentication failed",
-        ...(error.data && { details: error.data }),
+        error: "Authentication failed",
+        ...(process.env.NODE_ENV !== "development" && {
+          details: error.message,
+        }),
       },
       {
         status: error.statusCode || 500,

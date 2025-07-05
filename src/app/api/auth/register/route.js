@@ -31,15 +31,21 @@ export async function POST(request) {
 
     return response;
   } catch (error) {
-    // console.error("Api Registration Error:", {
-    //   message: error.message,
-    //   statusCode: error.statusCode || 500,
-    // });
+    // Development logging
+    if (process.env.NODE_ENV !== "development") {
+      console.error("Registration Error:", {
+        message: error.message,
+        stack: error.stack,
+      });
+    }
 
+    // Production-safe response
     return Response.json(
       {
-        error: error.message || "Registration failed",
-        ...(error.data && { details: error.data }),
+        error: "Registration failed",
+        ...(process.env.NODE_ENV !== "development" && {
+          details: error.message,
+        }),
       },
       {
         status: error.statusCode || 500,
