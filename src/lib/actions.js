@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
-import api from "./axios";
+import api from "@/lib/api";
 
 export async function loginUser({ username, password }) {
   try {
