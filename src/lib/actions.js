@@ -7,78 +7,35 @@ import { cookies } from "next/headers";
 import api from "@/lib/api";
 
 export async function loginUser({ username, password }) {
-  try {
-    const res = await api.post(`/auth/login`, { username, password });
+  const res = await api.post(`/auth/login`, { username, password });
 
-    if (res.data.status !== "success") {
-      throw new Error(res.data.response?.message || "Invalid credentials");
-    }
-
-    // return {
-    //   status: "success",
-    //   data: {
-    //     user: {
-    //       id: res.data.data.user.id,
-    //       username: res.data.data.user.username,
-    //       role: res.data.data.user.role,
-    //     },
-    //     token: res.data.token,
-    //   },
-    // };
-
-    return res.data;
-  } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Login Action Error:", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response?.data,
-      });
-    }
-
-    throw new Error(
-      process.env.NODE_ENV === "development"
-        ? error.message
-        : "Login failed. Please try again."
-    );
+  if (res.data.status !== "success") {
+    throw new Error(res.data.response?.message || "Invalid credentials");
   }
+
+  revalidatePath("/");
+
+  return res.data;
 }
 
 export async function registerUser({ email, username, password }) {
-  try {
-    // Make API request
-    const res = await api.post("/auth/register", {
-      email,
-      username,
-      password,
-    });
+  // Make API request
+  const res = await api.post("/auth/register", {
+    email,
+    username,
+    password,
+  });
 
-    // Handle API response
-    if (res.data?.status !== "success") {
-      throw new Error(
-        res.data?.message ||
-          res.data?.response?.message ||
-          "Registration failed"
-      );
-    }
-
-    // Return data (though redirect will prevent this from being reached)
-    return res.data;
-  } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Registration Error:", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response?.data,
-      });
-    }
-
+  // Handle API response
+  if (res.data?.status !== "success") {
     throw new Error(
-      process.env.NODE_ENV === "development"
-        ? error.message
-        : "Registration Error. Please try again."
+      res.data?.message || res.data?.response?.message || "Registration failed"
     );
   }
+
+  revalidatePath("/");
+
+  return res.data;
 }
 
 export async function getAllPosts() {
@@ -103,7 +60,8 @@ export async function getAllPosts() {
     }
 
     throw new Error(
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development" ||
+      error.message === "No response from server. Please check your connection."
         ? error.message
         : "Unable to load Posts. Please try again."
     );
@@ -141,7 +99,8 @@ export async function getMyPosts() {
     }
 
     throw new Error(
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development" ||
+      error.message === "No response from server. Please check your connection."
         ? error.message
         : "Unable to load Posts. Please try again."
     );
@@ -166,9 +125,6 @@ export async function getPost(id) {
 
     return res.data;
   } catch (error) {
-    // const message =
-    //   error.response?.data?.message || error.message || "Unable to load Post";
-    // throw new Error(message);
 
     if (process.env.NODE_ENV === "development") {
       console.error("Unable to load Post", {
@@ -179,7 +135,8 @@ export async function getPost(id) {
     }
 
     throw new Error(
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development" ||
+      error.message === "No response from server. Please check your connection."
         ? error.message
         : "Unable to load Post. Please try again."
     );
@@ -217,11 +174,6 @@ export async function createNewPost(formData) {
 
     return res.data;
   } catch (error) {
-    // const message =
-    //   error.response?.data?.message ||
-    //   error.message ||
-    //   "Unable to create Posts";
-    // throw new Error(message);
 
     if (process.env.NODE_ENV === "development") {
       console.error("Unable to create Post", {
@@ -232,7 +184,8 @@ export async function createNewPost(formData) {
     }
 
     throw new Error(
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development" ||
+      error.message === "No response from server. Please check your connection."
         ? error.message
         : "Unable to create Post. Please try again."
     );
@@ -276,11 +229,6 @@ export async function updatePost(formData) {
 
     return res.data;
   } catch (error) {
-    // const message =
-    //   error.response?.data?.message ||
-    //   error.message ||
-    //   "Unable to update Posts";
-    // throw new Error(message);
 
     if (process.env.NODE_ENV === "development") {
       console.error("Unable to update Post", {
@@ -291,7 +239,8 @@ export async function updatePost(formData) {
     }
 
     throw new Error(
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development" ||
+      error.message === "No response from server. Please check your connection."
         ? error.message
         : "Unable to update Post. Please try again."
     );
@@ -317,19 +266,6 @@ export async function getCurrentUser() {
 
     return res.data;
   } catch (error) {
-    // // Preserve the original error response
-    // const backendError = {
-    //   message: error.response?.data?.message || error.message,
-    //   statusCode: error.response?.status || 500,
-    //   // data: error.response?.data
-    // };
-
-    // // Create a new error with all the details
-    // const err = new Error(backendError.message);
-    // err.statusCode = backendError.statusCode;
-    // // err.data = backendError.data;
-
-    // throw err;
 
     if (process.env.NODE_ENV === "development") {
       console.error("Unable to fetch current user", {
@@ -340,7 +276,8 @@ export async function getCurrentUser() {
     }
 
     throw new Error(
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development" ||
+      error.message === "No response from server. Please check your connection."
         ? error.message
         : "Unable to fetch current user. Please try again."
     );
@@ -367,10 +304,7 @@ export async function deletePost(id) {
 
     return null;
   } catch (error) {
-    // const message =
-    //   error.response?.data?.message || error.message || "Unable to delete Post";
-    // throw new Error(message);
-
+   
     if (process.env.NODE_ENV === "development") {
       console.error("Unable to delete Post", {
         message: error.message,
@@ -380,7 +314,8 @@ export async function deletePost(id) {
     }
 
     throw new Error(
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development" ||
+      error.message === "No response from server. Please check your connection."
         ? error.message
         : "Unable to delete Post. Please try again."
     );
@@ -418,10 +353,7 @@ export async function userLogout() {
 
     return { status: "success" };
   } catch (error) {
-    // const message =
-    //   error.response?.data?.message || error.message || "Unable to delete Post";
-    // throw new Error(message);
-
+   
     if (process.env.NODE_ENV === "development") {
       console.error("Logging out failed", {
         message: error.message,
@@ -431,7 +363,8 @@ export async function userLogout() {
     }
 
     throw new Error(
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development" ||
+      error.message === "No response from server. Please check your connection."
         ? error.message
         : "Logging out failed. Please try again."
     );

@@ -58,26 +58,3 @@ export default async function PostsPage({ searchParams }) {
   );
 }
 
-/*
-  // return (
-  //   <Layout title="All Posts" user={username}>
-  //     <div className="max-w-4xl mx-auto px-4 py-8">
-  //       <div className="flex justify-between items-center mb-8">
-  //         <h1 className="text-3xl font-bold text-gray-900">Developer Blog</h1>
-  //         <Link href="/create">
-  //           <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition duration-200">
-  //             Create Post
-  //           </Button>
-  //         </Link>
-  //       </div>
-
-  //       <div className="space-y-6">
-  //         <Suspense fallback={<p>Loading....</p>}>
-  //           <UserPostsList posts={filteredPosts} />
-  //         </Suspense>
-  //       </div>
-  //     </div>
-  //   </Layout>
-  // );
-}
-*/

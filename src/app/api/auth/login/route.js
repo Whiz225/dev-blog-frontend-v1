@@ -1,4 +1,5 @@
 import { loginUser } from "@/lib/actions";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function POST(request) {
@@ -27,10 +28,19 @@ export async function POST(request) {
       value: data.token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      maxAge: 60 * 60 * 24 * 1, // 1 day
       path: "/",
       sameSite: "strict",
     });
+
+    if (data.token) {
+      // Add user info to request headers
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-user-id", data.data.user.id);
+      requestHeaders.set("x-user-username", data.data.user.username);
+
+      revalidatePath("/");
+    }
 
     return response;
   } catch (error) {
@@ -45,7 +55,13 @@ export async function POST(request) {
     // Production-safe response
     return Response.json(
       {
-        error: "Authentication failed",
+        error:
+          error.message === "Incorrect username or password" ||
+          error.message ===
+            "No response from server. Please check your connection."
+            ? error.message
+            : "Log in failed: Please Try again",
+        // error: "Log in failed: Please Try again",
         ...(process.env.NODE_ENV !== "development" && {
           details: error.message,
         }),

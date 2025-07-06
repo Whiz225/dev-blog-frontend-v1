@@ -51,15 +51,19 @@ export function useLogin() {
       router.push(redirectTo);
     },
     onError: (error) => {
-      toast.error(
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Invalid credentials. Please try again."
-      );
+      toast.error(error.message);
 
-      if (process.env.NODE_ENV === "development") {
-        console.error("Login Error:", error);
-      }
+      // toast.error(
+      //   process.env.NODE_ENV === "development" ||
+      //     error.message ===
+      //       "No response from server. Please check your connection."
+      //     ? error.message
+      //     : "Invalid credentials. Please try again."
+      // );
+
+      // if (process.env.NODE_ENV === "development") {
+      //   console.error("Login Error:", error);
+      // }
     },
     // Reset mutation state after 3 seconds
     retry: false,

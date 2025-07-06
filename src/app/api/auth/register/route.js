@@ -37,15 +37,24 @@ export async function POST(request) {
       value: data.token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      maxAge: 60 * 60 * 24 * 1, // 1 day
       path: "/",
       sameSite: "strict",
     });
 
+    if (data.token) {
+      // Add user info to request headers
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-user-id", data.data.user.id);
+      requestHeaders.set("x-user-username", data.data.user.username);
+
+      revalidatePath("/");
+    }
+
     return response;
   } catch (error) {
     // Development logging
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Registration Error:", {
         message: error.message,
         stack: error.stack,
@@ -55,8 +64,14 @@ export async function POST(request) {
     // Production-safe response
     return Response.json(
       {
-        error: "Registration failed",
-        ...(process.env.NODE_ENV !== "development" && {
+        error:
+          error.message === "Username already exist" ||
+          error.message === "Email is already in use by another user" ||
+          error.message ===
+            "No response from server. Please check your connection."
+            ? error.message
+            : "Registration failed. Please check your details and try again.",
+        ...(process.env.NODE_ENV === "development" && {
           details: error.message,
         }),
       },

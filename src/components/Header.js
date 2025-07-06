@@ -1,13 +1,12 @@
+// src/components/Header.js
 import Link from "next/link";
-
 import Navigation from "./Navigation";
 import Button from "./Button";
 import Logo from "./Logo";
 
 export default async function Header({ user }) {
-
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-sm sm:fixed sm:w-full sm:top-0 sm:z-50">
       <div className="container mx-auto px-4 py-3.2 flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold text-indigo-600">
           <div className="flex gap-2 justify-center items-center relative">
@@ -19,7 +18,6 @@ export default async function Header({ user }) {
             </div>
           </div>
         </Link>
-        {/* <Navigation /> */}
 
         <div className="flex items-center space-x-4">
           {!user ? (

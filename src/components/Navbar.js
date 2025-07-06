@@ -18,7 +18,7 @@ export default function Navbar({ user }) {
   return (
     // <nav className="bg-white shadow-sm sm:fixed sm:w-full sm:top-0 sm:z-50">
     <nav className="bg-white shadow-sm fixed w-full top-0 z-50 sm:static sm:shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">

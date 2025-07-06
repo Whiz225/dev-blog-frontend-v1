@@ -1,3 +1,5 @@
+// src/app/layout.js
+
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
@@ -19,7 +21,6 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const headersList = await headers();
-  // Get user info from headers
   const user = headersList.get("x-user-username");
 
   return (
@@ -27,7 +28,8 @@ export default async function RootLayout({ children }) {
       <body className={`${inter.className} flex flex-col min-h-full`}>
         <Header user={user} />
 
-        <main className="flex-grow container mx-auto px-4 py-8">
+        {/* Add pt-16 (or appropriate value) to account for fixed header height on mobile */}
+        <main className="flex-grow container mx-auto px-4 py-8 sm:pt-24">
           <Providers>{children}</Providers>
         </main>
 
