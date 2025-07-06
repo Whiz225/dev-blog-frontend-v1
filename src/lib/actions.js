@@ -28,7 +28,7 @@ export async function loginUser({ username, password }) {
 
     return res.data;
   } catch (error) {
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Login Action Error:", {
         message: error.message,
         stack: error.stack,
@@ -37,7 +37,7 @@ export async function loginUser({ username, password }) {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Login failed. Please try again."
     );
@@ -65,7 +65,7 @@ export async function registerUser({ email, username, password }) {
     // Return data (though redirect will prevent this from being reached)
     return res.data;
   } catch (error) {
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Registration Error:", {
         message: error.message,
         stack: error.stack,
@@ -74,7 +74,7 @@ export async function registerUser({ email, username, password }) {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Registration Error. Please try again."
     );
@@ -94,7 +94,7 @@ export async function getAllPosts() {
     //   error.response?.data?.message || error.message || "Unable to load Posts";
     // throw new Error(message);
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Unable to load Posts", {
         message: error.message,
         stack: error.stack,
@@ -103,7 +103,7 @@ export async function getAllPosts() {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Unable to load Posts. Please try again."
     );
@@ -132,7 +132,7 @@ export async function getMyPosts() {
     //   error.response?.data?.message || error.message || "Unable to load Posts";
     // throw new Error(message);
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Unable to load Posts", {
         message: error.message,
         stack: error.stack,
@@ -141,7 +141,7 @@ export async function getMyPosts() {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Unable to load Posts. Please try again."
     );
@@ -170,7 +170,7 @@ export async function getPost(id) {
     //   error.response?.data?.message || error.message || "Unable to load Post";
     // throw new Error(message);
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Unable to load Post", {
         message: error.message,
         stack: error.stack,
@@ -179,7 +179,7 @@ export async function getPost(id) {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Unable to load Post. Please try again."
     );
@@ -223,7 +223,7 @@ export async function createNewPost(formData) {
     //   "Unable to create Posts";
     // throw new Error(message);
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Unable to create Post", {
         message: error.message,
         stack: error.stack,
@@ -232,7 +232,7 @@ export async function createNewPost(formData) {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Unable to create Post. Please try again."
     );
@@ -282,7 +282,7 @@ export async function updatePost(formData) {
     //   "Unable to update Posts";
     // throw new Error(message);
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Unable to update Post", {
         message: error.message,
         stack: error.stack,
@@ -291,7 +291,7 @@ export async function updatePost(formData) {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Unable to update Post. Please try again."
     );
@@ -331,7 +331,7 @@ export async function getCurrentUser() {
 
     // throw err;
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Unable to fetch current user", {
         message: error.message,
         stack: error.stack,
@@ -340,7 +340,7 @@ export async function getCurrentUser() {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Unable to fetch current user. Please try again."
     );
@@ -371,7 +371,7 @@ export async function deletePost(id) {
     //   error.response?.data?.message || error.message || "Unable to delete Post";
     // throw new Error(message);
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Unable to delete Post", {
         message: error.message,
         stack: error.stack,
@@ -380,7 +380,7 @@ export async function deletePost(id) {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Unable to delete Post. Please try again."
     );
@@ -422,7 +422,7 @@ export async function userLogout() {
     //   error.response?.data?.message || error.message || "Unable to delete Post";
     // throw new Error(message);
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV === "development") {
       console.error("Logging out failed", {
         message: error.message,
         stack: error.stack,
@@ -431,7 +431,7 @@ export async function userLogout() {
     }
 
     throw new Error(
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? error.message
         : "Logging out failed. Please try again."
     );

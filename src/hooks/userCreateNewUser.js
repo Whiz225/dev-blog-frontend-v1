@@ -53,12 +53,14 @@ export function useCreateNewUser() {
     },
     onError: (error) => {
       toast.error(
-        process.env.NODE_ENV !== "development"
+        process.env.NODE_ENV === "development" ||
+          error.message === "Username already exist" ||
+          error.message === "Email is already in use by another user"
           ? error.message
           : "Registration failed. Please check your details and try again."
       );
 
-      if (process.env.NODE_ENV !== "development") {
+      if (process.env.NODE_ENV === "development") {
         console.error("Registration Error:", error);
       }
     },

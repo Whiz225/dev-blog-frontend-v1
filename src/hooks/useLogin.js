@@ -52,12 +52,12 @@ export function useLogin() {
     },
     onError: (error) => {
       toast.error(
-        process.env.NODE_ENV !== "development"
+        process.env.NODE_ENV === "development"
           ? error.message
           : "Invalid credentials. Please try again."
       );
 
-      if (process.env.NODE_ENV !== "development") {
+      if (process.env.NODE_ENV === "development") {
         console.error("Login Error:", error);
       }
     },

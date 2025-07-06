@@ -16,7 +16,7 @@ export default function Navbar({ user }) {
   };
 
   return (
-    <nav className="bg-white shadow-sm fixed w-full top-0 z-50">
+    <nav className="bg-white shadow-sm sm:fixed sm:w-full sm:top-0 sm:z-50">
       <div className="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
@@ -95,8 +95,8 @@ export default function Navbar({ user }) {
           </div>
 
           {/* Mobile menu button */}
-          <div className="-mr-1 px-4 flex items-center sm:hidden">
-            <button
+          <div className="-mr-1 px-4 bg-brand-200 flex items-center sm:hidden">
+            <Button
               onClick={toggleMenu}
               type="button"
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
@@ -134,7 +134,7 @@ export default function Navbar({ user }) {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
