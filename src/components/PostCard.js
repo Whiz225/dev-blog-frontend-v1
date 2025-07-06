@@ -1,3 +1,4 @@
+// src/components/PostCards.js
 import Link from "next/link";
 import Image from "next/image";
 
@@ -43,7 +44,6 @@ const PostCard = ({ post, children }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="relative h-10 w-10 rounded-full overflow-hidden">
-
               <Image
                 src={`/img${
                   post.author?.avatar || "/users/default-avatar.jpg"

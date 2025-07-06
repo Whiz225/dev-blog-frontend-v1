@@ -1,3 +1,4 @@
+// src/app/page.js
 import Link from "next/link";
 
 import PostsList from "../components/PostsList";
@@ -29,7 +30,6 @@ export default async function Home({ searchParams }) {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Dev-Blog</h1>
-
         <Link href="/create">
           <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Create Post
@@ -37,8 +37,10 @@ export default async function Home({ searchParams }) {
         </Link>
       </div>
 
-      <div className="space-y-6">
-        <PostsList filteredPosts={filteredPosts} />
+      <div className="flex justify-center">
+        <div className="space-y-6 max-w-7xl w-full">
+          <PostsList filteredPosts={filteredPosts} />
+        </div>
       </div>
     </div>
   );
