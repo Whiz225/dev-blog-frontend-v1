@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 import api from "@/lib/api";
@@ -12,8 +12,6 @@ export async function loginUser({ username, password }) {
   if (res.data.status !== "success") {
     throw new Error(res.data.response?.message || "Invalid credentials");
   }
-
-  revalidatePath("/");
 
   return res.data;
 }
@@ -33,278 +31,24 @@ export async function registerUser({ email, username, password }) {
     );
   }
 
-  revalidatePath("/");
-
   return res.data;
 }
 
-export async function getAllPosts() {
-  try {
-    const res = await api.get(`/posts/allPosts`);
-
-    if (res.data.status !== "success")
-      throw new Error(res.data.response?.message || "Unable to load Posts");
-
-    return res.data;
-  } catch (error) {
-    // const message =
-    //   error.response?.data?.message || error.message || "Unable to load Posts";
-    // throw new Error(message);
-
-    if (process.env.NODE_ENV === "development") {
-      console.error("Unable to load Posts", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response?.data,
-      });
-    }
-
-    throw new Error(
-      process.env.NODE_ENV === "development" ||
-      error.message === "No response from server. Please check your connection."
-        ? error.message
-        : "Unable to load Posts. Please try again."
-    );
-  }
-}
-
-export async function getMyPosts() {
-  try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("token");
-
-    const res = await api.get(`/posts/author`, {
-      credentials: "include",
-      headers: {
-        Cookie: `jwt=${jwt?.value}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (res.data.status !== "success")
-      throw new Error(res.data.response?.message || "Unable to load Posts");
-
-    return res.data;
-  } catch (error) {
-    // const message =
-    //   error.response?.data?.message || error.message || "Unable to load Posts";
-    // throw new Error(message);
-
-    if (process.env.NODE_ENV === "development") {
-      console.error("Unable to load Posts", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response?.data,
-      });
-    }
-
-    throw new Error(
-      process.env.NODE_ENV === "development" ||
-      error.message === "No response from server. Please check your connection."
-        ? error.message
-        : "Unable to load Posts. Please try again."
-    );
-  }
-}
-
-export async function getPost(id) {
-  try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("token");
-
-    const res = await api.get(`/posts/allPosts/${id}`, {
-      credentials: "include",
-      headers: {
-        Cookie: `jwt=${jwt?.value}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (res.data.status !== "success")
-      throw new Error(res.data.response?.message || "Unable to load Post");
-
-    return res.data;
-  } catch (error) {
-
-    if (process.env.NODE_ENV === "development") {
-      console.error("Unable to load Post", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response?.data,
-      });
-    }
-
-    throw new Error(
-      process.env.NODE_ENV === "development" ||
-      error.message === "No response from server. Please check your connection."
-        ? error.message
-        : "Unable to load Post. Please try again."
-    );
-  }
-}
-
-export async function createNewPost(formData) {
-  try {
-    const content = formData.get("content");
-    const title = formData.get("title");
-    const category = formData.get("category");
-
-    if (!content || !title) throw new Error("content and title are required");
-
-    if (title.length < 3)
-      throw new Error("title must be at least 3 characters");
-
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("token");
-
-    const res = await api.post(
-      `/posts/author`,
-      { content, title, category },
-      {
-        credentials: "include",
-        headers: {
-          Cookie: `jwt=${jwt?.value}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (res.data.status !== "success")
-      throw new Error(res.data.response?.message || "Unable to create Posts");
-
-    return res.data;
-  } catch (error) {
-
-    if (process.env.NODE_ENV === "development") {
-      console.error("Unable to create Post", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response?.data,
-      });
-    }
-
-    throw new Error(
-      process.env.NODE_ENV === "development" ||
-      error.message === "No response from server. Please check your connection."
-        ? error.message
-        : "Unable to create Post. Please try again."
-    );
-  }
-}
-
-export async function updatePost(formData) {
-  try {
-    const id = formData.get("postId");
-    const content = formData.get("content");
-    const title = formData.get("title");
-    const category = formData.get("category");
-
-    if (!content || !title || !id)
-      throw new Error("content and title are required");
-
-    if (title.length < 3)
-      throw new Error("title must be at least 3 characters");
-
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("token");
-
-    const res = await api.patch(
-      `/posts/author/${id}`,
-      { content, title, category },
-      {
-        credentials: "include",
-        headers: {
-          Cookie: `jwt=${jwt?.value}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (res.data.status !== "success") {
-      throw new Error(res.data.response?.message || "Unable to update Posts");
-    }
-
-    revalidatePath(`/posts/edit/${id}`);
-    revalidatePath("/posts");
-
-    return res.data;
-  } catch (error) {
-
-    if (process.env.NODE_ENV === "development") {
-      console.error("Unable to update Post", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response?.data,
-      });
-    }
-
-    throw new Error(
-      process.env.NODE_ENV === "development" ||
-      error.message === "No response from server. Please check your connection."
-        ? error.message
-        : "Unable to update Post. Please try again."
-    );
-  }
-}
-
-export async function getCurrentUser() {
-  try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("token");
-
-    const res = await api.get("/user/me", {
-      credentials: "include",
-      headers: {
-        Cookie: `jwt=${jwt?.value}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.data) {
-      throw new Error("No data received from server");
-    }
-
-    return res.data;
-  } catch (error) {
-
-    if (process.env.NODE_ENV === "development") {
-      console.error("Unable to fetch current user", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response?.data,
-      });
-    }
-
-    throw new Error(
-      process.env.NODE_ENV === "development" ||
-      error.message === "No response from server. Please check your connection."
-        ? error.message
-        : "Unable to fetch current user. Please try again."
-    );
-  }
-}
-
 export async function deletePost(id) {
-  try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("token");
+  const cookieStore = await cookies();
+  const jwt = cookieStore.get("token");
 
-    const res = await api.delete(`/posts/author/${id}`, {
-      credentials: "include",
-      headers: {
-        Cookie: `jwt=${jwt?.value}`,
-        "Content-Type": "application/json",
-      },
-    });
+  const res = await api.delete(`/posts/author/${id}`, {
+    credentials: "include",
+    headers: {
+      Cookie: `jwt=${jwt?.value}`,
+      "Content-Type": "application/json",
+    },
+  });
 
-    if (res.data.length >= 1)
-      throw new Error(res.data.response?.message || "Unable to delete Post");
+  if (res.data.length >= 1) {
+    const error = res.data.response?.message;
 
-    revalidatePath("/posts");
-
-    return null;
-  } catch (error) {
-   
     if (process.env.NODE_ENV === "development") {
       console.error("Unable to delete Post", {
         message: error.message,
@@ -320,40 +64,24 @@ export async function deletePost(id) {
         : "Unable to delete Post. Please try again."
     );
   }
+
+  revalidatePath("/posts");
+
+  return null;
 }
 
 export async function userLogout() {
-  try {
-    const res = await api.get("/auth/logout", {
-      credentials: "include",
-      headers: {
-        Cookie: `jwt=Logged-out`,
-        "Content-Type": "application/json",
-      },
-    });
+  const res = await api.get("/auth/logout", {
+    credentials: "include",
+    headers: {
+      Cookie: `jwt=Logged-out`,
+      "Content-Type": "application/json",
+    },
+  });
 
-    if (res.data.status !== "success")
-      throw new Error(
-        res.data.response?.message || "Logout failed! Please try again"
-      );
+  if (res.data.status !== "success") {
+    const error = res.data.response?.message;
 
-    const cookieStore = await cookies();
-
-    cookieStore.set({
-      name: "token",
-      value: "Logged out",
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7, // 1 week
-      path: "/",
-      sameSite: "strict",
-    });
-
-    revalidatePath("/posts");
-
-    return { status: "success" };
-  } catch (error) {
-   
     if (process.env.NODE_ENV === "development") {
       console.error("Logging out failed", {
         message: error.message,
@@ -369,4 +97,32 @@ export async function userLogout() {
         : "Logging out failed. Please try again."
     );
   }
+
+  const cookieStore = await cookies();
+
+  cookieStore.set({
+    name: "token",
+    value: "Logged out",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    path: "/",
+    sameSite: "strict",
+  });
+
+  cookieStore.set("username", "", {
+    httpOnly: false,
+    maxAge: 0,
+    path: "/",
+  });
+
+  cookieStore.set("userId", "", {
+    httpOnly: false,
+    maxAge: 0,
+    path: "/",
+  });
+
+  revalidatePath("/posts");
+
+  return { status: "success" };
 }

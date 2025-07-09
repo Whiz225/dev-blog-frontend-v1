@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import PostForm from "@/components/PostForm";
-import { createNewPost } from "@/lib/actions";
+import { createNewPost } from "@/lib/data-service";
 
 export const metadata = {
   title: "Create New Post",

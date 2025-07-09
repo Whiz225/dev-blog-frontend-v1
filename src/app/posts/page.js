@@ -1,45 +1,22 @@
 // src/app/posts/page.js
 
-import { headers } from "next/headers";
 import Link from "next/link";
 import { Suspense } from "react";
 
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import UserPostsList from "@/components/UsersPostsList";
-import { getMyPosts } from "@/lib/actions";
+import Spinner from "@/components/Spinner";
 
 export const metadata = {
   title: "MyPosts",
 };
 
 export default async function PostsPage({ searchParams }) {
-  // Get headers
-  const headersList = await headers();
-  // Get user info from headers
-  const username = headersList.get("x-user-username");
-  // const userId = headersList.get("x-user-id");
-  const data = await getMyPosts();
-  const { posts } = data.data;
-
-  let filteredPosts;
   const sort = (await searchParams?.sortBy) || "all";
 
-  if (!sort || sort === "all") filteredPosts = posts;
-
-  if (sort === "recent")
-    filteredPosts = posts.sort(
-      (a, b) =>
-        new Date(b.createdAt)?.getTime() - new Date(a.createdAt)?.getTime()
-    );
-
-  if (sort && sort !== "all" && sort !== "recent")
-    filteredPosts = posts.filter((post) =>
-      post.category?.toLowerCase()?.includes(sort)
-    );
-
   return (
-    <Layout title="All Posts" user={username}>
+    <Layout title="All Posts">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Developer Blog</h1>
@@ -50,11 +27,10 @@ export default async function PostsPage({ searchParams }) {
           </Link>
         </div>
 
-        <Suspense fallback={<p>Loading....</p>}>
-          <UserPostsList posts={filteredPosts} />
+        <Suspense fallback={<Spinner />}>
+          <UserPostsList sort={sort} />
         </Suspense>
       </div>
     </Layout>
   );
 }
-

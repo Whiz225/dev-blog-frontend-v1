@@ -1,13 +1,9 @@
 import Navbar from "./Navbar";
-import { Suspense } from "react";
 
-export default function Layout({ children, title = "Dev-Blog", user }) {
+export default function Layout({ children, title = "Dev-Blog" }) {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Suspense fallback={<p>Loading....</p>}>
-        <Navbar user={user} />
-      </Suspense>
-
+      <Navbar />
       <main className="pb-12">{children}</main>
     </div>
   );

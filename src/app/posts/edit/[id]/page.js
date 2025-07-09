@@ -1,11 +1,12 @@
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-import { updatePost } from "@/lib/actions";
-import { getPost } from "@/lib/actions";
+import { updatePost } from "@/lib/data-service";
+import { getPost } from "@/lib/data-service";
 import Layout from "@/components/Layout";
 import PostForm from "@/components/PostForm";
+import { revalidatePath } from "next/cache";
 
 export async function generateMetadata({ params }) {
   const data = await getPost(params.id);
@@ -15,11 +16,6 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function EditPostPage({ params }) {
-  // Get headers
-  const headersList = await headers();
-  // Get user info from headers
-  const user = headersList.get("x-user-username");
-  // const userId = headersList.get("x-user-id");
   const data = await getPost(params.id);
   const post = data.data.data;
 
@@ -27,11 +23,14 @@ export default async function EditPostPage({ params }) {
     "use server";
     const res = await updatePost(formData);
 
+    revalidatePath(`/posts/edit/${res.data.post.id}`);
+    revalidatePath("/posts");
+
     redirect(`/posts/${res.data.post.id}`);
   }
 
   return (
-    <Layout title={`Edit: ${post.title || "Post"}`} user={user}>
+    <Layout title={`Edit: ${post.title || "Post"}`}>
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="p-6">

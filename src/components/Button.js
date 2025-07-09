@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
 import { deletePost, userLogout } from "@/lib/actions";
 
 const sizeClasses = {

@@ -1,10 +1,25 @@
-// src/components/Header.js
+"use client";
+
 import Link from "next/link";
-import Navigation from "./Navigation";
 import Button from "./Button";
 import Logo from "./Logo";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
-export default async function Header({ user }) {
+export default function Header() {
+  const pathname = usePathname();
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    if (!document.cookie) return;
+    const getCookie = (name = "string") =>
+      document.cookie
+        ?.split("; ")
+        ?.find((el) => el?.startsWith(name))
+        ?.split("=")[1] || "";
+    setUsername(getCookie("username"));
+  }, [pathname]);
+
   return (
     <header className="bg-white shadow-sm sm:fixed sm:w-full sm:top-0 sm:z-50">
       <div className="container mx-auto px-4 py-3.2 flex justify-between items-center">
@@ -20,7 +35,7 @@ export default async function Header({ user }) {
         </Link>
 
         <div className="flex items-center space-x-4">
-          {!user ? (
+          {!username ? (
             <>
               <Link
                 href="/login"

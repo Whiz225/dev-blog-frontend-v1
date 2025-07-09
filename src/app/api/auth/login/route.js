@@ -18,9 +18,9 @@ export async function POST(request) {
     // 3. Call the login function
     const data = await loginUser({ username, password });
 
-    // 4. Set HTTP-only cookie for authentication
     const response = Response.json(data, { status: 200 });
 
+    // 4. Set HTTP-only cookie for authentication
     const cookieStore = await cookies();
 
     cookieStore.set({
@@ -33,14 +33,14 @@ export async function POST(request) {
       sameSite: "strict",
     });
 
-    if (data.token) {
-      // Add user info to request headers
-      const requestHeaders = new Headers(request.headers);
-      requestHeaders.set("x-user-id", data.data.user.id);
-      requestHeaders.set("x-user-username", data.data.user.username);
+    // if (data.token) {
+    //   // Add user info to request headers
+    //   const requestHeaders = new Headers(request.headers);
+    //   requestHeaders.set("x-user-id", data.data.user.id);
+    //   requestHeaders.set("x-user-username", data.data.user.username);
 
-      revalidatePath("/");
-    }
+    //   revalidatePath("/");
+    // }
 
     return response;
   } catch (error) {

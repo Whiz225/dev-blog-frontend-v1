@@ -1,30 +1,14 @@
 // src/app/page.js
 import Link from "next/link";
+import { Suspense } from "react";
 
 import PostsList from "../components/PostsList";
 import Button from "@/components/Button";
-import { getAllPosts } from "@/lib/actions";
+import Spinner from "@/components/Spinner";
 
 export default async function Home({ searchParams }) {
-  const res = await getAllPosts();
-  const posts = res.data.data;
 
-  let filteredPosts;
-  const sort = await searchParams?.sortBy;
-
-  if (!sort) filteredPosts = posts;
-  // if (!sort || sort === "all") filteredPosts = posts;
-
-  if (sort === "recent")
-    filteredPosts = posts.sort(
-      (a, b) =>
-        new Date(b.createdAt)?.getTime() - new Date(a.createdAt)?.getTime()
-    );
-
-  if (sort && sort !== "all" && sort !== "recent")
-    filteredPosts = posts.filter((post) =>
-      post.category?.toLowerCase()?.includes(sort)
-    );
+  const sort = await searchParams?.sortBy  || "all";
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -39,7 +23,9 @@ export default async function Home({ searchParams }) {
 
       <div className="flex justify-center">
         <div className="space-y-6 max-w-7xl w-full">
-          <PostsList filteredPosts={filteredPosts} />
+          <Suspense fallback={<Spinner />}>
+          <PostsList sort={sort} />
+          </Suspense>
         </div>
       </div>
     </div>

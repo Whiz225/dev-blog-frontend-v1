@@ -10,8 +10,8 @@ import Button from "@/components/Button";
 import { useLogin } from "@/hooks/useLogin";
 
 function LoginForm() {
-  const [username, setUsername] = useState("emmav1_225");
-  const [password, setPassword] = useState("emmav1_225");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const { login, isLoading } = useLogin();
 
   function handleSubmit(e) {

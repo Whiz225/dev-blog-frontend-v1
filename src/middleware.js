@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 const protectedRoutes = [
   "/posts",
   "/create",
-  "/posts/(.*)", // This will match all paths under /posts
+  // "/posts/(.*)", // This will match all paths under /posts
   "/post/edit/(.*)",
 ];
 
@@ -45,6 +45,16 @@ export async function middleware(request) {
     requestHeaders.set("x-user-id", res.user.id);
     requestHeaders.set("x-user-username", res.user.username);
 
+    cookieStore.set("username", res.user.username, {
+      httpOnly: false,
+      path: "/",
+    });
+
+    cookieStore.set("userId", res.user.id, {
+      httpOnly: false,
+      path: "/",
+    });
+
     const response = NextResponse.next({
       request: {
         headers: requestHeaders,
@@ -63,5 +73,6 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/posts", "/create", "/posts/:path*", "/post/edit/:path*"],
+  matcher: ["/posts", "/create", "/post/edit/:path*"],
+  // matcher: ["/posts", "/create", "/posts/:path*", "/post/edit/:path*"],
 };

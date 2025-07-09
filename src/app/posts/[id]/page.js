@@ -1,26 +1,26 @@
 // export const dynamic = "force-dynamic";
 
 import Link from "next/link";
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import { getPost } from "@/lib/actions";
+import { getPost } from "@/lib/data-service";
 
 export async function generateMetadata({ params }) {
   const data = await getPost(params.id);
   const { category } = data.data.data;
 
-  return { title: `${category} post` };
+  return { title: `${category ? category : "Dev-blog"} post` };
 }
 
 export default async function PostPage({ params }) {
   const { id } = params;
-  // Get headers 
-  const headersList = await headers();
-  // Get user info from headers
-  const username = headersList.get("x-user-username");
-  const userId = headersList.get("x-user-id");
+  // Get userId and username from cookies
+  const cookieStore = await cookies();
+  const userId = cookieStore.get("userId")?.value;
+  const username = cookieStore.get("username")?.value;
+
   // 3. Fetch post data
   const postResponse = await getPost(id);
   const post = postResponse.data.data;
@@ -75,9 +75,7 @@ export default async function PostPage({ params }) {
         </div>
 
         <div className="mt-6">
-          <Link href="/posts">
-            ← Back to all posts
-          </Link>
+          <Link href="/">← Back to all posts</Link>
         </div>
       </div>
     </Layout>

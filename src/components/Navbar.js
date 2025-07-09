@@ -2,21 +2,31 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "@/components/Button";
 import Logo from "./Logo";
 
-export default function Navbar({ user }) {
-  const pathname = usePathname();
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!document.cookie) return;
+    const getCookie = (name = "string") =>
+      document.cookie
+        ?.split("; ")
+        ?.find((el) => el?.startsWith(name))
+        ?.split("=")[1] || "";
+    setUsername(getCookie("username"));
+  }, [pathname]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    // <nav className="bg-white shadow-sm sm:fixed sm:w-full sm:top-0 sm:z-50">
     <nav className="bg-white shadow-sm fixed w-full top-0 z-50 sm:static sm:shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
@@ -31,8 +41,6 @@ export default function Navbar({ user }) {
                     </span>
                   </div>
                 </div>
-                {/* <Logo />
-                <span>DevBlog</span> */}
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -60,11 +68,11 @@ export default function Navbar({ user }) {
           </div>
 
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            {user ? (
+            {username ? (
               <div className="ml-3 relative">
                 <div className="flex space-x-4 items-center">
                   <span className="text-gray-700 text-sm font-medium">
-                    Hello, {user}
+                    Hello, {username}
                   </span>
                   <Button logout={true}>Logout</Button>
                 </div>
@@ -157,7 +165,7 @@ export default function Navbar({ user }) {
           >
             My Posts
           </Link>
-          {user && (
+          {username && (
             <Link
               href="/create"
               onClick={() => setIsMenuOpen(false)}
@@ -172,19 +180,19 @@ export default function Navbar({ user }) {
           )}
         </div>
         <div className="pt-4 pb-3 border-t border-gray-200">
-          {user ? (
+          {username ? (
             <>
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
                   <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-500">
                     <span className="text-sm font-medium leading-none text-white">
-                      {user.charAt(0).toUpperCase()}
+                      {username.charAt(0).toUpperCase()}
                     </span>
                   </span>
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium text-gray-800">
-                    {user}
+                    {username}
                   </div>
                 </div>
               </div>

@@ -14,7 +14,6 @@ const queryClient = new QueryClient({
 
 export function Providers({ children }) {
   return (
-    // <DarkModeProvider>
     <QueryClientProvider client={queryClient}>
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
@@ -39,6 +38,5 @@ export function Providers({ children }) {
         }}
       />
     </QueryClientProvider>
-    // </DarkModeProvider>
   );
 }
