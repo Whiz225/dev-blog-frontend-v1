@@ -33,15 +33,6 @@ export async function POST(request) {
       sameSite: "strict",
     });
 
-    // if (data.token) {
-    //   // Add user info to request headers
-    //   const requestHeaders = new Headers(request.headers);
-    //   requestHeaders.set("x-user-id", data.data.user.id);
-    //   requestHeaders.set("x-user-username", data.data.user.username);
-
-    //   revalidatePath("/");
-    // }
-
     return response;
   } catch (error) {
     // Development logging
