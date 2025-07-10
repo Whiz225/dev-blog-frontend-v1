@@ -6,10 +6,6 @@ export async function verifyToken(token) {
 
     return data.data.data;
   } catch (error) {
-    // console.error("Verify Error:", {
-    //   message: error.message,
-    //   statusCode: error.statusCode || 500,
-    // });
     const message =
       error.response?.data?.message ||
       error.message ||
@@ -17,8 +13,3 @@ export async function verifyToken(token) {
     throw new Error(message);
   }
 }
-
-// // Helper function to create tokens
-// export function createToken(payload, expiresIn = "1h") {
-//   return jwt.sign(payload, JWT_SECRET, { expiresIn });
-// }

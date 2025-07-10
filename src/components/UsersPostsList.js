@@ -43,7 +43,7 @@ async function UserPostsList({ sort }) {
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"
             >
               <PostCard post={post}>
-                <div className="space-x-2">
+                <div className="space-x-2 pt-3">
                   <Link href={`/posts/edit/${post._id}`}>
                     <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
                       Edit

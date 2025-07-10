@@ -1,5 +1,4 @@
 import { loginUser } from "@/lib/actions";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function POST(request) {

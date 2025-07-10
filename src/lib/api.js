@@ -13,10 +13,10 @@ const api = axios.create({
 
 // Enhanced error handling
 
-api.interceptors.request.use((config) => {
-  // You can add auth headers here if needed
-  return config;
-});
+// api.interceptors.request.use((config) => {
+//   // You can add auth headers here if needed
+//   return config;
+// });
 
 api.interceptors.response.use(
   (response) => response,

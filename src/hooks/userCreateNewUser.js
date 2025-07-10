@@ -58,11 +58,7 @@ export function useCreateNewUser() {
         console.error("Registration Error:", error);
       }
     },
-    // Optional: Reset mutation state after 3 seconds
     retry: false,
-    // onSettled: () => {
-    //   queryClient.invalidateQueries({ queryKey: ["user"] });
-    // },
   });
   return { createUser, isLoading };
 }

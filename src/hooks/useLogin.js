@@ -23,17 +23,6 @@ export function useLogin() {
         }),
       });
 
-      // const response = await fetch("/api/auth/login", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     username,
-      //     password,
-      //   }),
-      // });
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || "Login failed. Please try again.");
@@ -46,10 +35,6 @@ export function useLogin() {
       }
 
       return data.data.user;
-      // } catch (error) {
-      //   console.error("User login error:", error);
-      //   throw error; // Re-throw to trigger onError
-      // }
     },
 
     onSuccess: (data) => {
@@ -63,24 +48,8 @@ export function useLogin() {
     },
     onError: (error) => {
       toast.error(error.message);
-
-      // toast.error(
-      //   process.env.NODE_ENV === "development" ||
-      //     error.message ===
-      //       "No response from server. Please check your connection."
-      //     ? error.message
-      //     : "Invalid credentials. Please try again."
-      // );
-
-      // if (process.env.NODE_ENV === "development") {
-      //   console.error("Login Error:", error);
-      // }
     },
-    // Reset mutation state after 3 seconds
     retry: false,
-    // onSettled: () => {
-    //   queryClient.invalidateQueries({ queryKey: ["user"] });
-    // },
   });
 
   return { login, isLoading };
